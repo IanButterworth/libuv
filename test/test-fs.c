@@ -1083,14 +1083,20 @@ TEST_IMPL(fs_posix_delete) {
   uv_fs_req_cleanup(&open_req_noclose);
 
   /* delete the dir while the file is still open, which should succeed on posix */
-  rmdir("test_dir");
+  r = uv_fs_unlink(NULL, &unlink_req, "test_dir/file", NULL);
+  ASSERT_OK(r);
+  ASSERT_OK(unlink_req.result);
+  uv_fs_req_cleanup(&unlink_req);
+
+  r = uv_fs_rmdir(NULL, &rmdir_req, "test_dir", NULL);
+  ASSERT_OK(r);
+  ASSERT_OK(rmdir_req.result);
+  uv_fs_req_cleanup(&rmdir_req);
 
   /* Cleanup */
   r = uv_fs_close(NULL, &close_req, open_req_noclose.result, NULL);
   ASSERT_OK(r);
   uv_fs_req_cleanup(&close_req);
-
-  uv_run(loop, UV_RUN_DEFAULT);
 
   MAKE_VALGRIND_HAPPY(uv_default_loop());
   return 0;
