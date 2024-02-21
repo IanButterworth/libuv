@@ -1082,12 +1082,18 @@ TEST_IMPL(fs_posix_delete) {
   ASSERT_GE(r, 0);
   uv_fs_req_cleanup(&open_req_noclose);
 
-  /* delete the dir while the file is still open, which should succeed on posix */
+  /* should not be possible to delete the non-empty dir */
+  r = uv_fs_rmdir(NULL, &rmdir_req, "test_dir", NULL);
+  ASSERT_EQ(r, UV_ENOTEMPTY);
+  ASSERT_EQ(r, rmdir_req.result);
+  uv_fs_req_cleanup(&rmdir_req);
+
   r = uv_fs_unlink(NULL, &unlink_req, "test_dir/file", NULL);
   ASSERT_OK(r);
   ASSERT_OK(unlink_req.result);
   uv_fs_req_cleanup(&unlink_req);
 
+  /* delete the dir while the file is still open, which should succeed on posix */
   r = uv_fs_rmdir(NULL, &rmdir_req, "test_dir", NULL);
   ASSERT_OK(r);
   ASSERT_OK(rmdir_req.result);
