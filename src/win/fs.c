@@ -1095,7 +1095,7 @@ void __unlink_rmdir(uv_fs_t* req, BOOL isrmdir) {
 
   if (isrmdir & !(info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
     /* Error if we're in rmdir mode but it is not a dir */
-    SET_REQ_WIN32_ERROR(req, UV_ENOTDIR);
+    SET_REQ_UV_ERROR(req, UV_ENOTDIR, ERROR_DIRECTORY);
     CloseHandle(handle);
     return;
   }
