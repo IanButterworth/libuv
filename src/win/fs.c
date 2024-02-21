@@ -1136,7 +1136,7 @@ void __unlink_rmdir(uv_fs_t* req, BOOL isrmdir) {
   if (NT_SUCCESS(status)) {
     SET_REQ_SUCCESS(req);
   } else {
-    error = GetLastError();
+    error = pRtlNtStatusToDosError(status);
     if (error == ERROR_NOT_SUPPORTED) {
       /* posix delete not supported so try fallback */
       if (info.dwFileAttributes & FILE_ATTRIBUTE_READONLY) {
