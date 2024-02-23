@@ -1075,7 +1075,7 @@ void __unlink_rmdir(uv_fs_t* req, BOOL isrmdir) {
   DWORD error;
 
   handle = CreateFileW(pathw,
-                       FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES | DELETE,
+                       FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES,
                        FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                        NULL,
                        OPEN_EXISTING,
